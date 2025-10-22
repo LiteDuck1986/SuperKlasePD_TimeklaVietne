@@ -14,8 +14,15 @@ public class VietnesApmekletajs implements Serializable, Comparable<VietnesApmek
 		private int DzGads, Nosutiti;
 		private String lietVards, parole, vards, uzvards, valsts;
 		
-		// Bezargumentu konstruktors
-		public VietnesApmekletajs() { };
+		// Konstruktors
+		public VietnesApmekletajs(int DzGads, int Nosutiti, String lietVards, String parole, String vards, String uzvards, String valsts) {
+			this.DzGads = DzGads;
+			this.Nosutiti = Nosutiti;
+			this.lietVards = lietVards;
+			this.parole = parole;
+			this.vards = vards;
+			this.vards = vards;
+		}
 
 		
 		// Getter metodes
