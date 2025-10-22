@@ -2,6 +2,7 @@ package timeklaVietnePD;
 
 import java.awt.Font;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -9,13 +10,29 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class TimeklaVietne {
+	
+	public static String virknesParbaude(String zinojums, String noklusejums) {
+		String virkne;
+		
+		do {
+			virkne = JOptionPane.showInputDialog(zinojums, noklusejums);
+			
+			if(virkne == null)
+				return null;
+			
+			virkne = virkne.trim();
+		} while(!Pattern.matches("^[\\p{L} .]+$", virkne));
+		
+		return virkne;
+	}
 
 	public static void main(String[] args) {
 		int izvele;
-		String[] logonIzveles = {"Ielogoties kā lietotājs", "Ielogoties kā administrators", "Beigt darbu"};
+		String[] logonIzveles = {"Reģistrēties", "Autorizēties", "Beigt darbu"};
 		
 		ArrayList<Object> lietotaji = new ArrayList<>();
 		ArrayList<Object> paroles = new ArrayList<>();
+		VietnesApmekletajs lietotajs = null;
 		
 		JPanel logonIzvelne = new JPanel();
 		logonIzvelne.add(new JLabel(new ImageIcon(".//bildes//duckbear.png")));
@@ -27,15 +44,30 @@ public class TimeklaVietne {
 	                null, logonIzveles, null);
 			
 			if (izvele == -1 || izvele == 2)
-				izvele = 0;
+				izvele = -1;
 						
 			switch(izvele) {
-
+			case 0:
+				lietotajs = new VietnesApmekletajs();
+				String v = virknesParbaude("Ievadi vārdu: ", "Intars");
+				if (v == null)
+					break;
+				lietotajs.setVards(v);
+				
+				String u = virknesParbaude("Ievadi uzvārdu: ", "Jakubovičs");
+				if (u == null)
+					break;
+				lietotajs.setUzvards(v);
+				
+				break;
+			case 1:
+				
+				break;
 			}
 			
 				
 			
-		} while(izvele != 0);
+		} while(izvele != -1);
 		
 	}
 
