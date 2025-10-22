@@ -1,0 +1,8 @@
+# Superklase - Tīmekļa Vietnes PD
+
+## Darāmie darbi:
+- [ ] Sākt izstrādi OOP vidē, izmantojot iekapsulēšanas (Java Bean) un mantošanas principus
+- [ ] Ieviest JOptionPane
+- [ ] Ieviest ievaddatu validāciju
+- [ ] Nodrošināt galvenajā klasē (TimeklaVietne) iespēju izveidot jaunus klašu objektus, apskatīt tos, dzēst tos
+- [ ] Nodrošināt iespēju izsaukt klasēm raksturojošās metodes
