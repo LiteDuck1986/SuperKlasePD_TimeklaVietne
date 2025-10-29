@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 
 public class TimeklaVietne {
 	
-	public static String virknesParbaude(String zinojums, String noklusejums) {
+	public static String virknesParbaude(String zinojums, String noklusejums, boolean irParole) {
 		String virkne;
 		
 		do {
@@ -49,15 +49,26 @@ public class TimeklaVietne {
 			switch(izvele) {
 			case 0:
 				lietotajs = new VietnesApmekletajs();
-				String v = virknesParbaude("Ievadi vārdu: ", "Intars");
+				
+				String v = virknesParbaude("Ievadi vārdu: ", "Intars", false);
 				if (v == null)
 					break;
 				lietotajs.setVards(v);
 				
-				String u = virknesParbaude("Ievadi uzvārdu: ", "Jakubovičs");
+				String u = virknesParbaude("Ievadi uzvārdu: ", "Jakubovičs", false);
 				if (u == null)
 					break;
 				lietotajs.setUzvards(v);
+				
+				String lietVards = virknesParbaude("Ievadi lietotājvārdu: ", "Jakubovičs", false);
+				if (lietVards == null)
+					break;
+				lietotajs.setLietVards(v);
+				
+				String parole = virknesParbaude("Ievadi paroli (vismaz 8 simboli): ", null, true);
+				if (parole == null || parole.length() < 8)
+					break;
+				lietotajs.setParole(v);
 				
 				break;
 			case 1:
