@@ -1,13 +1,13 @@
 package timeklaVietnePD;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Pattern;
-import java.text.SimpleDateFormat;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -57,7 +57,7 @@ public class TimeklaVietne {
 		int izvele;
 		String[] logonIzveles = {"Reģistrēties", "Autorizēties", "Beigt darbu"};
 		
-		ArrayList<Object> lietotaji = new ArrayList<>();
+		ArrayList<User> lietArray = new ArrayList<>();
 		ArrayList<Object> paroles = new ArrayList<>();
 		VietnesApmekletajs lietotajs = null;
 		
@@ -75,7 +75,7 @@ public class TimeklaVietne {
 						
 			switch(izvele) {
 			case 0:
-				lietotajs = new VietnesApmekletajs(0, 0, null, null, null, null, null, null);
+				lietotajs = new VietnesApmekletajs(0, 0, null, null, null, null, null);
 				
 				
 				String v = virknesParbaude("Ievadi vārdu: ", "Intars", false);
@@ -154,17 +154,88 @@ public class TimeklaVietne {
 				
 				String epasts = lietotajs.getLietVards().trim() + "@duckbear.lv";
 				JOptionPane.showMessageDialog(null, "Tava e-pasta adrese: " + epasts);
-				lietotajs.setEpasts(epasts);
-				
-				// Te tiek izveidota jauna registrēta lietotāja klase
+				User liet = new User(lietotajs.getDzGads(), 0, lietotajs.getLietVards(), lietotajs.getParole(), lietotajs.getVards(), lietotajs.getUzvards(), lietotajs.getValsts(), epasts);
+				lietArray.add(liet);
 				
 				break;
 			case 1:
 				
+				String ievade = JOptionPane.showInputDialog(null, "Ievadi savu lietotājvārdu: ", "Autorizēšanās", JOptionPane.PLAIN_MESSAGE);
+				if (ievade == null) break;
+				
+				int userIndex = -1; 
+				for (int i = 0; i < lietArray.size(); i++) {
+					if (ievade.equals(lietArray.get(i).getLietVards())) {
+						userIndex = i;
+						break;
+					}
+				}
+				
+				if (userIndex == -1) {
+					JOptionPane.showMessageDialog(null, "Lietotājvārds netika atrasts", "Kļūda", JOptionPane.ERROR_MESSAGE);
+					break;
+				}
+				
+				paroleMas = null;
+				boolean irParole = false;
+				
+				do {
+					JPanel panel = new JPanel();
+					panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+					JLabel label = new JLabel("Ievadi paroli:");
+					JPasswordField par = new JPasswordField(15);
+					JCheckBox showPassword = new JCheckBox("Rādīt paroli");
+					
+					showPassword.addActionListener(new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							JCheckBox cb = (JCheckBox) e.getSource();
+							if (cb.isSelected()) {
+								par.setEchoChar((char) 0);
+							} else {
+								par.setEchoChar((Character) UIManager.get("PasswordField.echoChar"));
+							}
+						}
+					});
+					
+					panel.add(label);
+					panel.add(par);
+					panel.add(showPassword);
+					
+					String[] options = new String[]{"Ok", "Cancel"};
+					int opcija = (JOptionPane.showOptionDialog(null, panel, "Paroles ievade", JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]));
+					
+					if (opcija == 0) {
+						paroleMas = par.getPassword();
+						if (paroleMas.length < 8)
+							JOptionPane.showMessageDialog(null, "Parole par īsu!", "Informācija", JOptionPane.WARNING_MESSAGE);
+						
+					} else if (opcija == 1 || opcija == -1) {
+						paroleMas = new char[] {' '};
+						break;
+					}
+					
+				} while(paroleMas.length < 8);
+				
+				if (paroleMas.length >= 8) {
+					
+					char[] saglabataParole = lietArray.get(userIndex).getParole().toCharArray();
+					
+					if (Arrays.equals(paroleMas, saglabataParole)) {
+						irParole = true;
+						JOptionPane.showMessageDialog(null, "Autorizācija veiksmīga! Sveicināts, " + lietArray.get(userIndex).getVards() + "!", "Veiksmīgi", JOptionPane.INFORMATION_MESSAGE);
+					}
+					
+					Arrays.fill(saglabataParole, '0');
+					Arrays.fill(paroleMas, '0'); 
+					
+					if (!irParole)
+						JOptionPane.showMessageDialog(null, "Nepareiza parole!", "Kļūda", JOptionPane.ERROR_MESSAGE);
+					
+				} 
+				
 				break;
 			}
-			
-				
 			
 		} while(izvele != -1);
 		

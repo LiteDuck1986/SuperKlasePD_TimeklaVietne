@@ -13,17 +13,16 @@ public class VietnesApmekletajs implements Serializable, Comparable<VietnesApmek
 
 		// Atribūti
 		private int Nosutiti;
-		private String lietVards, parole, vards, uzvards, valsts, epasts;
+		private String lietVards, parole, vards, uzvards, valsts;
 		
 		// Konstruktors
-		public VietnesApmekletajs(int dzGads, int Nosutiti, String lietVards, String parole, String vards, String uzvards, String valsts, String epasts) {
+		public VietnesApmekletajs(int dzGads, int Nosutiti, String lietVards, String parole, String vards, String uzvards, String valsts) {
 			this.DzGads = dzGads;
 			this.Nosutiti = Nosutiti;
 			this.lietVards = lietVards;
 			this.parole = parole;
 			this.vards = vards;
 			this.uzvards = uzvards;
-			this.epasts = epasts;
 			
 		}
 		
@@ -46,10 +45,6 @@ public class VietnesApmekletajs implements Serializable, Comparable<VietnesApmek
 		
 		public String getValsts() {
 			return valsts;
-		}
-		
-		public String getEpasts() {
-			return epasts;
 		}
 		
 		public int getDzGads() {
@@ -81,10 +76,6 @@ public class VietnesApmekletajs implements Serializable, Comparable<VietnesApmek
 		
 		public void setValsts(String valsts) {
 			this.valsts = valsts;
-		}
-		
-		public void setEpasts(String epasts) {
-			this.epasts = epasts;
 		}
 		
 		public void setDzGads(int dzGads) {
