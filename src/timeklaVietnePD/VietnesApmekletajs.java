@@ -1,6 +1,8 @@
 package timeklaVietnePD;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class VietnesApmekletajs implements Serializable, Comparable<VietnesApmekletajs>{
@@ -14,6 +16,7 @@ public class VietnesApmekletajs implements Serializable, Comparable<VietnesApmek
 		// Atribūti
 		private int Nosutiti;
 		private String lietVards, parole, vards, uzvards, valsts, epasts;
+		private List<String> vestules = new ArrayList<>();
 		
 		// Konstruktors
 		public VietnesApmekletajs(int dzGads, int Nosutiti, String lietVards, String parole, String vards, String uzvards, String valsts, String epasts) {
@@ -60,6 +63,10 @@ public class VietnesApmekletajs implements Serializable, Comparable<VietnesApmek
 			return Nosutiti;
 		}
 		
+		public List<String> getVestules() {
+	        return vestules;
+	    }
+		
 		
 		
 		// Setter metodes
@@ -94,6 +101,10 @@ public class VietnesApmekletajs implements Serializable, Comparable<VietnesApmek
 		public void setNosutiti(int Nosutiti) {
 			this.Nosutiti = Nosutiti;
 		}
+		
+		public void pievienoVestuli(String s) {
+	        vestules.add(s);
+	    }
 			
 		@Override
 		public int compareTo(VietnesApmekletajs o) {

@@ -16,7 +16,10 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
+import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SpinnerDateModel;
 import javax.swing.UIManager;
 
@@ -157,11 +160,158 @@ public class TimeklaVietne {
 				lietotajs.setEpasts(epasts);
 				
 				// Te tiek izveidota jauna registrēta lietotāja klase
+				lietotaji.add(lietotajs);
+				paroles.add(lietotajs.getParole());
 				
 				break;
+				
+				// Autorizēšanās
 			case 1:
-				
-				break;
+			    if (lietotaji.isEmpty()) {
+			        JOptionPane.showMessageDialog(null,
+			        		"Nav neviena reģistrēta lietotāja!", "Kļūda", JOptionPane.WARNING_MESSAGE);
+			        break;
+			    }
+
+			    String ievLiet = JOptionPane.showInputDialog("Ievadi lietotājvārdu:");
+			    if (ievLiet == null || ievLiet.isEmpty())
+			        break;
+
+			    JPasswordField parole = new JPasswordField();
+			    int opcija = JOptionPane.showConfirmDialog(null,
+			    		parole, "Ievadi paroli:", JOptionPane.OK_CANCEL_OPTION,
+			    		JOptionPane.PLAIN_MESSAGE);
+			    
+			    if (opcija != JOptionPane.OK_OPTION)
+			        break;
+
+			    String ievPar = new String(parole.getPassword());
+
+			    boolean atrasts = false;
+			    VietnesApmekletajs atrastais = null;
+
+			    for (Object o : lietotaji) {
+			        VietnesApmekletajs lietotaj = (VietnesApmekletajs) o;
+			        if (lietotaj.getLietVards().equals(ievLiet) && lietotaj.getParole().equals(ievPar)) {
+			            atrasts = true;
+			            atrastais = lietotaj;
+			            break;
+			        }
+			    }
+
+			    if (!atrasts) {
+			        JOptionPane.showMessageDialog(null, "Nepareizs lietotājvārds vai parole!", 
+			                                      "Kļūda", JOptionPane.ERROR_MESSAGE);
+			        break;
+			    }
+
+			    JOptionPane.showMessageDialog(null, 
+			        "Sveicināts, " + atrastais.getVards() + "!\nTavs e-pasts: " + atrastais.getEpasts(), 
+			        "Autorizācija veiksmīga", JOptionPane.INFORMATION_MESSAGE);
+
+			    // Darbības
+			    String[] darbibas = {"Nosūtīt e-pastu", "Skatīt profilu", "Apskatīt ienākušās vēstules", 
+			                         "Dzēst savu kontu", "Iziet no konta"};
+
+			    boolean aktivs = true;
+			    while (aktivs) {
+			        String izveleStr = (String) JOptionPane.showInputDialog(null, 
+			                "Izvēlies darbību:", 
+			                "DuckBear e-pasta vietne", 
+			                JOptionPane.PLAIN_MESSAGE, null, darbibas, darbibas[0]);
+
+			        if (izveleStr == null || izveleStr.equals("Iziet no konta")) {
+			            JOptionPane.showMessageDialog(null, "Izrakstīšanās veiksmīga!");
+			            aktivs = false;
+			            break;
+			        }
+
+			        switch (izveleStr) {
+			            case "Skatīt profilu":
+			                JOptionPane.showMessageDialog(null, 
+			                    "Profils:\nVārds: " + atrastais.getVards() + 
+			                    "\nUzvārds: " + atrastais.getUzvards() + 
+			                    "\nE-pasts: " + atrastais.getEpasts() +
+			                    "\nDzimšanas gads: " + atrastais.getDzGads());
+			                break;
+
+			            case "Apskatīt ienākušās vēstules":
+			                if (atrastais.getVestules().isEmpty()) {
+			                    JOptionPane.showMessageDialog(null, "Tev nav jaunu vēstuļu.");
+			                } else {
+			                    String str = "";
+			                    for (String s : atrastais.getVestules()) {
+			                        str += s + "\n============================================\n";
+			                    }
+			                    JTextArea ta = new JTextArea(str, 10, 40);
+			                    ta.setEditable(false);
+			                    JScrollPane sp = new JScrollPane(ta);
+			                    sp.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+			                    JOptionPane.showMessageDialog(null, sp, "Ienākušās vēstules", JOptionPane.PLAIN_MESSAGE);
+			                }
+			                break;
+
+			            case "Nosūtīt e-pastu":
+			                if (lietotaji.size() <= 1) {
+			                    JOptionPane.showMessageDialog(null, "Nav citu lietotāju, kam nosūtīt vēstuli.");
+			                    break;
+			                }
+
+			                // dropdown saraksts ar lietotājiem
+			                ArrayList<String> adresati = new ArrayList<>();
+			                for (Object o : lietotaji) {
+			                    VietnesApmekletajs lietotaj = (VietnesApmekletajs) o;
+			                    if (!lietotaj.getLietVards().equals(atrastais.getLietVards())) {
+			                        adresati.add(lietotaj.getEpasts());
+			                    }
+			                }
+
+			                String saņēmējs = (String) JOptionPane.showInputDialog(null, 
+			                        "Izvēlies kam sūtīt:", "Nosūtīt vēstuli", 
+			                        JOptionPane.PLAIN_MESSAGE, null, adresati.toArray(), adresati.get(0));
+
+			                if (saņēmējs == null) break;
+
+			                JTextArea ta = new JTextArea(10, 40);
+			                JScrollPane sp = new JScrollPane(ta);
+			                int s = JOptionPane.showConfirmDialog(null, sp, 
+			                        "Ieraksti savu vēstuli", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+			                
+			                if (s == JOptionPane.OK_OPTION) {
+			                    String teksts = ta.getText();
+			                    if (teksts.trim().isEmpty()) {
+			                        JOptionPane.showMessageDialog(null, "Vēstule ir tukša!");
+			                        break;
+			                    }
+
+			                    // Atrodam adresātu un pievienojam vēstuli
+			                    for (Object o : lietotaji) {
+			                        VietnesApmekletajs lietotaj = (VietnesApmekletajs) o;
+			                        if (lietotaj.getEpasts().equals(saņēmējs)) {
+			                        	lietotaj.pievienoVestuli("No: " + atrastais.getEpasts() + "\n\n" + teksts);
+			                            break;
+			                        }
+			                    }
+
+			                    JOptionPane.showMessageDialog(null, "Vēstule nosūtīta!");
+			                }
+			                break;
+
+			            case "Dzēst savu kontu":
+			                int apstiprin = JOptionPane.showConfirmDialog(null, 
+			                        "Vai tiešām vēlies dzēst savu kontu?", 
+			                        "Apstiprinājums", JOptionPane.YES_NO_OPTION);
+			                if (apstiprin == JOptionPane.YES_OPTION) {
+			                    lietotaji.remove(atrastais);
+			                    //Konts dzēsts :(
+			                    JOptionPane.showMessageDialog(null, "Konts dzēsts veiksmīgi!");
+			                    aktivs = false;
+			                }
+			                break;
+			        }
+			    }
+			    break;
+
 			}
 			
 				
