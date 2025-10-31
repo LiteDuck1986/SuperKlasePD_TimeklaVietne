@@ -1,11 +1,14 @@
 package timeklaVietnePD;
 
-import timeklaVietnePD.VietnesApmekletajs;
-
 public class User extends VietnesApmekletajs{
 	
 	// Atribūti
 	//Nav
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	public User(int DzGads, int Nosutiti, String lietVards, String parole, String vards, String uzvards,
 			String valsts, String epasts) {

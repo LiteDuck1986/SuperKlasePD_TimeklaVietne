@@ -1,7 +1,6 @@
 package timeklaVietnePD;
 
 import java.io.Serializable;
-import java.util.Random;
 
 
 public class VietnesApmekletajs implements Serializable, Comparable<VietnesApmekletajs>{
@@ -10,13 +9,15 @@ public class VietnesApmekletajs implements Serializable, Comparable<VietnesApmek
 	 */
 	private static final long serialVersionUID = 5672751866842530800L;
 	
+		int DzGads;
+
 		// Atribūti
-		private int DzGads, Nosutiti;
+		private int Nosutiti;
 		private String lietVards, parole, vards, uzvards, valsts, epasts;
 		
 		// Konstruktors
-		public VietnesApmekletajs(int DzGads, int Nosutiti, String lietVards, String parole, String vards, String uzvards, String valsts, String epasts) {
-			this.DzGads = DzGads;
+		public VietnesApmekletajs(int dzGads, int Nosutiti, String lietVards, String parole, String vards, String uzvards, String valsts, String epasts) {
+			this.DzGads = dzGads;
 			this.Nosutiti = Nosutiti;
 			this.lietVards = lietVards;
 			this.parole = parole;
@@ -86,8 +87,8 @@ public class VietnesApmekletajs implements Serializable, Comparable<VietnesApmek
 			this.epasts = epasts;
 		}
 		
-		public void setDzGads(int DzGads) {
-			this.DzGads = DzGads;
+		public void setDzGads(int dzGads) {
+			this.DzGads = dzGads;
 		}
 		
 		public void setNosutiti(int Nosutiti) {
@@ -98,5 +99,10 @@ public class VietnesApmekletajs implements Serializable, Comparable<VietnesApmek
 		public int compareTo(VietnesApmekletajs o) {
 			// TODO Auto-generated method stub
 			return 0;
+		}
+
+		public void setDzGads(String dzimsanasGads) {
+			// TODO Auto-generated method stub
+			
 		}
 }
