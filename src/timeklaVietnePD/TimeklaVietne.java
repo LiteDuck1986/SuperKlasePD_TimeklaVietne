@@ -60,12 +60,16 @@ public class TimeklaVietne {
 		int izvele;
 		String[] logonIzveles = {"Reģistrēties", "Autorizēties", "Beigt darbu"};
 		
-		ArrayList<Object> lietotaji = new ArrayList<>();
+		ArrayList<User> lietotaji = new ArrayList<>();
 		ArrayList<Object> paroles = new ArrayList<>();
 		User lietotajs = null;
 		
+		Admin Admins = null;
+		Admins = new Admin(0, "Admin", "admin123", "Admin@duckbear.lv");
+		
 		JPanel logonIzvelne = new JPanel();
 		logonIzvelne.add(new JLabel(new ImageIcon(".//bildes//duckbear.png")));
+		
 		
 		
 		do {
@@ -167,14 +171,10 @@ public class TimeklaVietne {
 				
 				// Autorizēšanās
 			case 1:
-//			    if (lietotaji.isEmpty()) {
-//			        JOptionPane.showMessageDialog(null,
-//			        		"Nav neviena reģistrēta lietotāja!", "Kļūda", JOptionPane.WARNING_MESSAGE);
-//			        break;
-//			    }
 				
 				// Darbības
 				boolean user = false;
+				boolean admin = false;
 			    String[] darbibasIzvele = {"Autorizēties kā lietotājs", "Autorizēties kā Admin", "Atgriezties"};
 				
 				boolean izvelesLogs = true;
@@ -197,7 +197,7 @@ public class TimeklaVietne {
 			                break;
 
 			            case "Autorizēties kā Admin":
-			                	user = false;
+			                	admin = true;
 			                    izvelesLogs = false;
 			                    break;
 			                }
@@ -227,11 +227,11 @@ public class TimeklaVietne {
 			    boolean atrasts = false;
 			    User atrastais = null;
 
-			    for (Object o : lietotaji) {
-			    	User lietotaj = (User) o;
-			        if (lietotaj.getLietVards().equals(ievLiet) && lietotaj.getParole().equals(ievPar)) {
+			    // For each cikls, kur glabā lietotājus o mainīgajā un tiek izpildīts for each cikls.
+			    for (User liet : lietotaji) {
+			        if (liet.getLietVards().equals(ievLiet) && liet.getParole().equals(ievPar)) {
 			            atrasts = true;
-			            atrastais = lietotaj;
+			            atrastais = liet;
 			            break;
 			        }
 			    }
@@ -294,12 +294,11 @@ public class TimeklaVietne {
 			                    break;
 			                }
 
-			                // dropdown saraksts ar lietotājiem
+			                //dropdown saraksts ar lietotājiem
 			                ArrayList<String> adresati = new ArrayList<>();
-			                for (Object o : lietotaji) {
-			                	User lietotaj = (User) o;
-			                    if (!lietotaj.getLietVards().equals(atrastais.getLietVards())) {
-			                        adresati.add(lietotaj.getEpasts());
+			                for (User liet : lietotaji) {
+			                    if (!liet.getLietVards().equals(atrastais.getLietVards())) {
+			                        adresati.add(liet.getEpasts());
 			                    }
 			                }
 
@@ -322,10 +321,9 @@ public class TimeklaVietne {
 			                    }
 
 			                    // Atrodam adresātu un pievienojam vēstuli
-			                    for (Object o : lietotaji) {
-			                    	User lietotaj = (User) o;
-			                        if (lietotaj.getEpasts().equals(saņēmējs)) {
-			                        	lietotaj.pievienoVestuli("No: " + atrastais.getEpasts() + "\n\n" + teksts);
+			                    for (User liet : lietotaji) {
+			                        if (liet.getEpasts().equals(saņēmējs)) {
+			                        	liet.pievienoVestuli("No: " + atrastais.getEpasts() + "\n\n" + teksts);
 			                            break;
 			                        }
 			                    }
@@ -352,8 +350,78 @@ public class TimeklaVietne {
 			    
 			    
 			    // Admin logs
-			    else if (user = false) {
-			    	//To do
+			    if (admin == true) {
+			    	
+			    	 String ievLiet = JOptionPane.showInputDialog("Ievadi lietotājvārdu:");
+					    if (ievLiet == null || ievLiet.isEmpty())
+					        break;
+
+					    JPasswordField parole = new JPasswordField();
+					    int opcija = JOptionPane.showConfirmDialog(null,
+					    		parole, "Ievadi paroli:", JOptionPane.OK_CANCEL_OPTION,
+					    		JOptionPane.PLAIN_MESSAGE);
+					    
+					    if (opcija != JOptionPane.OK_OPTION)
+					        break;
+
+					    String ievPar = new String(parole.getPassword());
+
+					    boolean atrasts = false;
+
+
+					        if (Admins.getLietVards().equals(ievLiet) && Admins.getParole().equals(ievPar)) {
+					            atrasts = true;
+					        }
+
+					    if (atrasts == false) {
+					        JOptionPane.showMessageDialog(null, "Nepareizs lietotājvārds vai parole!", 
+					                                      "Kļūda", JOptionPane.ERROR_MESSAGE);
+					        break;
+					    }
+
+					    JOptionPane.showMessageDialog(null, 
+					        "Sveicināts, " + Admins.getLietVards() + "!\nTavs e-pasts: " + Admins.getEpasts(), 
+					        "Autorizācija veiksmīga", JOptionPane.INFORMATION_MESSAGE);
+
+					    // Darbības
+					    String[] darbibas = {"Skatīt profilu", "Skatīt reģistrētos lietotājus", "Rediģēt reģistrētos lietotājus", 
+					                         "Dzēst ŗeģistrētos lietotājus", "Iziet no konta"};
+
+					    boolean aktivs = true;
+					    while (aktivs) {
+					        String izveleStr = (String) JOptionPane.showInputDialog(null, 
+					                "Izvēlies darbību:", 
+					                "DuckBear e-pasta vietne", 
+					                JOptionPane.PLAIN_MESSAGE, null, darbibas, darbibas[0]);
+
+					        if (izveleStr == null || izveleStr.equals("Iziet no konta")) {
+					            JOptionPane.showMessageDialog(null, "Izrakstīšanās veiksmīga!");
+					            aktivs = false;
+					            break;
+					        }
+
+					        switch (izveleStr) {
+					        case "Skatīt profilu":
+					            JOptionPane.showMessageDialog(null,
+					                "Profils:\nLietotājvārds: " + Admins.getLietVards() +
+					                "\nE-pasts: " + Admins.getEpasts());
+					            break;
+
+					        case "Skatīt reģistrētos lietotājus":
+					            Admins.skatitLietotajus(lietotaji);
+					            break;
+
+					        case "Rediģēt reģistrētos lietotājus":
+					            Admins.redigetLietotaju(lietotaji);
+					            break;
+
+					        case "Dzēst ŗeģistrētos lietotājus":
+					            Admins.dzestLietotaju(lietotaji);
+					            break;
+					        }
+					    }
+					    break;
+					    
 			    }
 			}
 			
