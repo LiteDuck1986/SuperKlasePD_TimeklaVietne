@@ -227,7 +227,6 @@ public class TimeklaVietne {
 			    boolean atrasts = false;
 			    User atrastais = null;
 
-			    // For each cikls, kur glabā lietotājus o mainīgajā un tiek izpildīts for each cikls.
 			    for (User liet : lietotaji) {
 			        if (liet.getLietVards().equals(ievLiet) && liet.getParole().equals(ievPar)) {
 			            atrasts = true;
