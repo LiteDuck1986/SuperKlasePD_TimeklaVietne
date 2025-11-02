@@ -62,7 +62,7 @@ public class TimeklaVietne {
 		
 		ArrayList<Object> lietotaji = new ArrayList<>();
 		ArrayList<Object> paroles = new ArrayList<>();
-		VietnesApmekletajs lietotajs = null;
+		User lietotajs = null;
 		
 		JPanel logonIzvelne = new JPanel();
 		logonIzvelne.add(new JLabel(new ImageIcon(".//bildes//duckbear.png")));
@@ -78,7 +78,7 @@ public class TimeklaVietne {
 						
 			switch(izvele) {
 			case 0:
-				lietotajs = new VietnesApmekletajs(0, 0, null, null, null, null, null, null);
+				lietotajs = new User(0, 0, null, null, null, null, null, null);
 				
 				
 				String v = virknesParbaude("Ievadi vārdu: ", "Intars", false);
@@ -167,12 +167,49 @@ public class TimeklaVietne {
 				
 				// Autorizēšanās
 			case 1:
-			    if (lietotaji.isEmpty()) {
-			        JOptionPane.showMessageDialog(null,
-			        		"Nav neviena reģistrēta lietotāja!", "Kļūda", JOptionPane.WARNING_MESSAGE);
-			        break;
-			    }
+//			    if (lietotaji.isEmpty()) {
+//			        JOptionPane.showMessageDialog(null,
+//			        		"Nav neviena reģistrēta lietotāja!", "Kļūda", JOptionPane.WARNING_MESSAGE);
+//			        break;
+//			    }
+				
+				// Darbības
+				boolean user = false;
+			    String[] darbibasIzvele = {"Autorizēties kā lietotājs", "Autorizēties kā Admin", "Atgriezties"};
+				
+				boolean izvelesLogs = true;
+			    while (izvelesLogs) {
+			        String izvelesAut = (String) JOptionPane.showInputDialog(null, 
+			                "Izvēlies darbību:", 
+			                "DuckBear e-pasta vietne", 
+			                JOptionPane.PLAIN_MESSAGE, null, darbibasIzvele, darbibasIzvele[0]);
 
+			        if (izvelesAut == null || izvelesAut.equals("Atgriezties")) {
+			            JOptionPane.showMessageDialog(null, "Jūs atgriezāties atpakaļ uz sākuma lapu!");
+			            izvelesLogs = false;
+			            break;
+			        }
+
+			        switch (izvelesAut) {
+			            case "Autorizēties kā lietotājs":
+			            	user = true;
+			            	izvelesLogs = false;
+			                break;
+
+			            case "Autorizēties kā Admin":
+			                	user = false;
+			                    izvelesLogs = false;
+			                    break;
+			                }
+			                break;
+			        }
+			
+				
+				
+				// User logs
+			    if(user == true) {
+			    
+			    
 			    String ievLiet = JOptionPane.showInputDialog("Ievadi lietotājvārdu:");
 			    if (ievLiet == null || ievLiet.isEmpty())
 			        break;
@@ -188,10 +225,10 @@ public class TimeklaVietne {
 			    String ievPar = new String(parole.getPassword());
 
 			    boolean atrasts = false;
-			    VietnesApmekletajs atrastais = null;
+			    User atrastais = null;
 
 			    for (Object o : lietotaji) {
-			        VietnesApmekletajs lietotaj = (VietnesApmekletajs) o;
+			    	User lietotaj = (User) o;
 			        if (lietotaj.getLietVards().equals(ievLiet) && lietotaj.getParole().equals(ievPar)) {
 			            atrasts = true;
 			            atrastais = lietotaj;
@@ -260,7 +297,7 @@ public class TimeklaVietne {
 			                // dropdown saraksts ar lietotājiem
 			                ArrayList<String> adresati = new ArrayList<>();
 			                for (Object o : lietotaji) {
-			                    VietnesApmekletajs lietotaj = (VietnesApmekletajs) o;
+			                	User lietotaj = (User) o;
 			                    if (!lietotaj.getLietVards().equals(atrastais.getLietVards())) {
 			                        adresati.add(lietotaj.getEpasts());
 			                    }
@@ -286,7 +323,7 @@ public class TimeklaVietne {
 
 			                    // Atrodam adresātu un pievienojam vēstuli
 			                    for (Object o : lietotaji) {
-			                        VietnesApmekletajs lietotaj = (VietnesApmekletajs) o;
+			                    	User lietotaj = (User) o;
 			                        if (lietotaj.getEpasts().equals(saņēmējs)) {
 			                        	lietotaj.pievienoVestuli("No: " + atrastais.getEpasts() + "\n\n" + teksts);
 			                            break;
@@ -311,7 +348,13 @@ public class TimeklaVietne {
 			        }
 			    }
 			    break;
-
+			    }
+			    
+			    
+			    // Admin logs
+			    else if (user = false) {
+			    	//To do
+			    }
 			}
 			
 				
