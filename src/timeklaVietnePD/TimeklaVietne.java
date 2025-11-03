@@ -152,9 +152,18 @@ public class TimeklaVietne {
 				 
 				if (datumaIzv == JOptionPane.OK_OPTION) {
 				    Date izveletaisDat = (Date) datumaSpinner.getValue();
-				    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-				    dzimsanasGads = sdf.format(izveletaisDat);
-				    lietotajs.setDzGads(dzimsanasGads);
+				    // Mainīts, lai iegūtu tikai gadu kā int, atbilstoši User klasei
+				    SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+				    String dzimsanasGadsStr = sdf.format(izveletaisDat);
+				    
+				    try {
+				    	int gads = Integer.parseInt(dzimsanasGadsStr);
+				        lietotajs.setDzGads(gads); 
+				    } catch (NumberFormatException e) {
+				    	JOptionPane.showMessageDialog(null, "Kļūda dzimšanas gada iegūšanā.", "Kļūda", JOptionPane.ERROR_MESSAGE);
+				    	break;
+				    }
+				    
 				} else {
 					break;
 				}
