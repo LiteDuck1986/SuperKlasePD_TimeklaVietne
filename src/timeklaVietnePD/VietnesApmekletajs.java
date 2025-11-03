@@ -1,6 +1,8 @@
 package timeklaVietnePD;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class VietnesApmekletajs implements Serializable, Comparable<VietnesApmekletajs>{
@@ -8,33 +10,22 @@ public class VietnesApmekletajs implements Serializable, Comparable<VietnesApmek
 	 *  Ģenerēts serialVersionUID
 	 */
 	private static final long serialVersionUID = 5672751866842530800L;
-	
-		int DzGads;
 
 		// Atribūti
 		private int Nosutiti;
-		private String lietVards, parole, vards, uzvards, valsts;
+		private String lietVards, parole, epasts;
+		private List<String> vestules = new ArrayList<>();
 		
 		// Konstruktors
-		public VietnesApmekletajs(int dzGads, int Nosutiti, String lietVards, String parole, String vards, String uzvards, String valsts) {
-			this.DzGads = dzGads;
+		public VietnesApmekletajs(int Nosutiti, String lietVards, String parole, String epasts) {
 			this.Nosutiti = Nosutiti;
 			this.lietVards = lietVards;
 			this.parole = parole;
-			this.vards = vards;
-			this.uzvards = uzvards;
+			this.epasts = epasts;
 			
 		}
 		
 		// Getter metodes
-		public String getVards() {
-			return vards;
-		}
-		
-		public String getUzvards() {
-			return uzvards;
-		}
-		
 		public String getLietVards() {
 			return lietVards;
 		}
@@ -43,28 +34,21 @@ public class VietnesApmekletajs implements Serializable, Comparable<VietnesApmek
 			return parole;
 		}
 		
-		public String getValsts() {
-			return valsts;
-		}
-		
-		public int getDzGads() {
-			return DzGads;
+		public String getEpasts() {
+			return epasts;
 		}
 		
 		public int getNosutiti() {
 			return Nosutiti;
 		}
 		
+		public List<String> getVestules() {
+	        return vestules;
+	    }
+		
 		
 		
 		// Setter metodes
-		public void setVards(String vards) {
-			this.vards = vards;
-		}
-		
-		public void setUzvards(String uzvards) {
-			this.uzvards = uzvards;
-		}
 		
 		public void setLietVards(String lietVards) {
 			this.lietVards = lietVards;
@@ -74,17 +58,17 @@ public class VietnesApmekletajs implements Serializable, Comparable<VietnesApmek
 			this.parole = parole;
 		}
 		
-		public void setValsts(String valsts) {
-			this.valsts = valsts;
-		}
-		
-		public void setDzGads(int dzGads) {
-			this.DzGads = dzGads;
+		public void setEpasts(String epasts) {
+			this.epasts = epasts;
 		}
 		
 		public void setNosutiti(int Nosutiti) {
 			this.Nosutiti = Nosutiti;
 		}
+		
+		public void pievienoVestuli(String s) {
+	        vestules.add(s);
+	    }
 			
 		@Override
 		public int compareTo(VietnesApmekletajs o) {
